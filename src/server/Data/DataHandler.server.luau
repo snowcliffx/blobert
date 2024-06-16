@@ -30,9 +30,27 @@ local function OnShutdown()
     if IS_STUDIO then
         task.wait(1)
     else
+        local MainThread = coroutine.running()
+        local ThreadsRunning = 0
+
+        local StartSaveThread = coroutine.wrap(function(player: Player, data)
+            DataStore.SetData(player, data, false)
+
+            ThreadsRunning -= 1
+
+            if ThreadsRunning == 0 then
+                coroutine.resume(MainThread)
+            end
+        end)
+
         for index, player in ipairs(Players:GetPlayers()) do
-            local Data = PlayerData[player.UserId]
-            DataStore.SetData(player, Data, false)
+            ThreadsRunning += 1
+
+            StartSaveThread(player, PlayerData[player.UserId])
+        end
+
+        if ThreadsRunning > 0 then
+            coroutine.yield()
         end
     end
 end
