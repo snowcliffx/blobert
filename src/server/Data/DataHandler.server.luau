@@ -15,7 +15,10 @@ local function Initialize(player: Player)
 
         while AUTO_SAVE do
             task.wait(AUTO_SAVE_WAIT)
-            
+
+            for key, value in pairs(PlayerData[player.UserId]) do
+                DataStore.SetData(player, key, value)
+            end
         end
     else
         player:Kick("Fetching data failed after 10 tries!")
