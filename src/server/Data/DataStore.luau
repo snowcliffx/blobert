@@ -33,17 +33,17 @@ local DataTemplate: Data = {
 }
 
 local function DeepCopyTable(t)
-    local Copy = {}
+	local Copy = {}
 
-    for key, value in pairs(t) do
-        if type(value) == "table" then
-            Copy[key] = DeepCopyTable(value)
-        else
-            Copy[key] = value
-        end
-    end
+	for key, value in pairs(t) do
+		if type(value) == "table" then
+			Copy[key] = DeepCopyTable(value)
+		else
+			Copy[key] = value
+		end
+	end
 
-    return Copy
+	return Copy
 end
 
 local function WaitForRequestBudget(request_type: Enum.DataStoreRequestType)
@@ -56,19 +56,19 @@ local function WaitForRequestBudget(request_type: Enum.DataStoreRequestType)
 end
 
 function DataStore.Reconcile(data: Data)
-    for key, value in pairs(DataTemplate) do
-        if data[key] == nil then
-            if type(value) == "table" then
-                data[key] = DeepCopyTable(value)
-            else
-                data[key] = value
-            end
-        end
-    end
+	for key, value in pairs(DataTemplate) do
+		if data[key] == nil then
+			if type(value) == "table" then
+				data[key] = DeepCopyTable(value)
+			else
+				data[key] = value
+			end
+		end
+	end
 end
 
 function DataStore.GetData(player: Player): Data?
-    local success, result
+	local success, result
 	local count = 0
 
 	repeat
@@ -78,33 +78,36 @@ function DataStore.GetData(player: Player): Data?
 		success, result = pcall(MainDataStore.GetAsync, MainDataStore, player.UserId)
 	until success or not Players:FindFirstChild(player.Name) or count == ATTEMPT_COUNT
 
-    if success then
-        return result
-    else
-        print("There was an error while getting data: " .. result)
-        return nil
-    end
+	if success then
+		return result
+	else
+		print("There was an error while getting data: " .. result)
+		return nil
+	end
 end
 
-function DataStore.SetData(player: Player, key: string, value: any)
+function DataStore.SetData(player: Player, value: any, halt: boolean)
 	local success, result
 	local count = 0
 
 	repeat
 		count += 1
 
-		WaitForRequestBudget(SetAsyncRequest)
-		success, result = pcall(MainDataStore.SetAsync, MainDataStore, key, value)
+		if halt then
+			WaitForRequestBudget(SetAsyncRequest)
+		end
+
+		success, result = pcall(MainDataStore.SetAsync, MainDataStore, player.UserId, value)
 	until success or count == ATTEMPT_COUNT
 
-    if success then
-        print("Saved successfully!")
-    else
-        print("There was an error while saving data: " .. result)
-    end
+	if success then
+		print("Saved successfully!")
+	else
+		print("There was an error while saving data: " .. result)
+	end
 end
 
-function DataStore.UpdateData(player: Player, key: string, callback: <T>(old_value: T) -> T)
+function DataStore.UpdateData(player: Player, callback: <T>(old_value: T) -> T)
 	local success, result
 	local count = 0
 
@@ -112,10 +115,10 @@ function DataStore.UpdateData(player: Player, key: string, callback: <T>(old_val
 		count += 1
 
 		WaitForRequestBudget(UpdateAsyncRequest)
-		success, result = pcall(MainDataStore.UpdateAsync, MainDataStore, key, callback)
+		success, result = pcall(MainDataStore.UpdateAsync, MainDataStore, player.UserId, callback)
 	until success or count == ATTEMPT_COUNT
 
-	if success  then
+	if success then
 		print("Updated successfully!")
 	else
 		print("There was an error while updating data: " .. result)
