@@ -9,12 +9,12 @@ local Players = game:GetService("Players")
 --[ TYPES ]--
 type Data = {
 	Entertainment: number,
-    Health: number,
-    Hunger: number,
-    Money: number,
-    Thirst: number,
+	Health: number,
+	Hunger: number,
+	Money: number,
+	Thirst: number,
 
-    FoodOwned: { [string]: number }
+	FoodOwned: { [string]: number },
 }
 
 --[ SETTINGS ]--
@@ -35,13 +35,13 @@ local MainDataStore = DataStoreService:GetDataStore("MainDataStore")
 
 --[ DATA TEMPLATE ]--
 local DataTemplate: Data = {
-    Entertainment = 100,
-    Health = 100,
-    Hunger = 100,
-    Money = 0,
-    Thirst = 100,
+	Entertainment = 100,
+	Health = 100,
+	Hunger = 100,
+	Money = 0,
+	Thirst = 100,
 
-    FoodOwned = {}
+	FoodOwned = {},
 }
 
 local function DeepCopyTable(t)
@@ -91,11 +91,11 @@ function DataStore.GetData(player: Player): Data | {} | nil
 	until success or not Players:FindFirstChild(player.Name) or count == ATTEMPT_COUNT
 
 	if success then
-        if result == nil then
-            return {}
-        else
-            return result
-        end
+		if result == nil then
+			return {}
+		else
+			return result
+		end
 	else
 		print("There was an error while getting data: " .. result)
 		return nil
