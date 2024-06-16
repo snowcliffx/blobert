@@ -67,7 +67,7 @@ function DataStore.Reconcile(data: Data)
 	end
 end
 
-function DataStore.GetData(player: Player): Data?
+function DataStore.GetData(player: Player): Data | {} | nil
 	local success, result
 	local count = 0
 
@@ -79,7 +79,11 @@ function DataStore.GetData(player: Player): Data?
 	until success or not Players:FindFirstChild(player.Name) or count == ATTEMPT_COUNT
 
 	if success then
-		return result
+        if result == nil then
+            return {}
+        else
+            return result
+        end
 	else
 		print("There was an error while getting data: " .. result)
 		return nil

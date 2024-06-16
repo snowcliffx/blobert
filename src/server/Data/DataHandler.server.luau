@@ -12,7 +12,7 @@ local IS_STUDIO = RunService:IsStudio()
 local function Initialize(player: Player)
 	local Data = DataStore.GetData(player)
 
-	if Data then
+	if Data ~= nil then
 		DataStore.Reconcile(Data)
 		PlayerData[player.UserId] = Data
 
