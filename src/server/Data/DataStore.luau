@@ -8,7 +8,13 @@ local Players = game:GetService("Players")
 
 --[ TYPES ]--
 type Data = {
-	Money: number,
+	Entertainment: number,
+    Health: number,
+    Hunger: number,
+    Money: number,
+    Thirst: number,
+
+    FoodOwned: { [string]: number }
 }
 
 --[ SETTINGS ]--
@@ -29,7 +35,13 @@ local MainDataStore = DataStoreService:GetDataStore("MainDataStore")
 
 --[ DATA TEMPLATE ]--
 local DataTemplate: Data = {
-	Money = 0,
+    Entertainment = 100,
+    Health = 100,
+    Hunger = 100,
+    Money = 0,
+    Thirst = 100,
+
+    FoodOwned = {}
 }
 
 local function DeepCopyTable(t)
