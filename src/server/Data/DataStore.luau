@@ -105,9 +105,9 @@ function DataStore.SetData(player: Player, value: any, halt: boolean)
 	until success or count == ATTEMPT_COUNT
 
 	if success then
-		print("Saved successfully!")
+		print("Set data successfully!")
 	else
-		print("There was an error while saving data: " .. result)
+		print("There was an error while setting data: " .. result)
 	end
 end
 
