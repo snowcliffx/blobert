@@ -114,9 +114,9 @@ function DataStore.UpdateData(player: Player, callback: <T>(old_value: T) -> T, 
 	repeat
 		count += 1
 
-        if halt then
-            WaitForRequestBudget(UpdateAsyncRequest)
-        end
+		if halt then
+			WaitForRequestBudget(UpdateAsyncRequest)
+		end
 
 		success, result = pcall(MainDataStore.UpdateAsync, MainDataStore, player.UserId, callback)
 	until success or count == ATTEMPT_COUNT

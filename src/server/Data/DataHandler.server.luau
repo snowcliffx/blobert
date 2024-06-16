@@ -13,7 +13,7 @@ local function Initialize(player: Player)
 	local Data = DataStore.GetData(player)
 
 	if Data then
-        DataStore.Reconcile(Data)
+		DataStore.Reconcile(Data)
 		PlayerData[player.UserId] = Data
 
 		while AUTO_SAVE do
@@ -27,32 +27,32 @@ local function Initialize(player: Player)
 end
 
 local function OnShutdown()
-    if IS_STUDIO then
-        task.wait(1)
-    else
-        local MainThread = coroutine.running()
-        local ThreadsRunning = 0
+	if IS_STUDIO then
+		task.wait(1)
+	else
+		local MainThread = coroutine.running()
+		local ThreadsRunning = 0
 
-        local StartSaveThread = coroutine.wrap(function(player: Player, data)
-            DataStore.SetData(player, data, false)
+		local StartSaveThread = coroutine.wrap(function(player: Player, data)
+			DataStore.SetData(player, data, false)
 
-            ThreadsRunning -= 1
+			ThreadsRunning -= 1
 
-            if ThreadsRunning == 0 then
-                coroutine.resume(MainThread)
-            end
-        end)
+			if ThreadsRunning == 0 then
+				coroutine.resume(MainThread)
+			end
+		end)
 
-        for index, player in ipairs(Players:GetPlayers()) do
-            ThreadsRunning += 1
+		for index, player in ipairs(Players:GetPlayers()) do
+			ThreadsRunning += 1
 
-            StartSaveThread(player, PlayerData[player.UserId])
-        end
+			StartSaveThread(player, PlayerData[player.UserId])
+		end
 
-        if ThreadsRunning > 0 then
-            coroutine.yield()
-        end
-    end
+		if ThreadsRunning > 0 then
+			coroutine.yield()
+		end
+	end
 end
 
 Players.PlayerAdded:Connect(function(player)
@@ -60,7 +60,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 
 Players.PlayerRemoving:Connect(function(player)
-    DataStore.SetData(player, PlayerData[player.UserId], true)
+	DataStore.SetData(player, PlayerData[player.UserId], true)
 end)
 
 for index, player in ipairs(Players:GetPlayers()) do
