@@ -22,7 +22,7 @@ local function Initialize(player: Player)
 			DataStore.SetData(player, PlayerData[player.UserId], true)
 		end
 	else
-		player:Kick("Fetching data failed after 10 tries!")
+		player:Kick("Fetching data failed after 20 tries!")
 	end
 end
 
