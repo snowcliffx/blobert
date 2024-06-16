@@ -19,7 +19,7 @@ local function Initialize(player: Player)
 		while AUTO_SAVE do
 			task.wait(AUTO_SAVE_WAIT)
 
-			DataStore.SetData(player, Data, true)
+			DataStore.SetData(player, PlayerData[player.UserId], true)
 		end
 	else
 		player:Kick("Fetching data failed after 10 tries!")
@@ -57,6 +57,10 @@ end
 
 Players.PlayerAdded:Connect(function(player)
 	Initialize(player)
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    DataStore.SetData(player, PlayerData[player.UserId], true)
 end)
 
 for index, player in ipairs(Players:GetPlayers()) do

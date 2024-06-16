@@ -12,7 +12,7 @@ type Data = {
 }
 
 --[ SETTINGS ]--
-local ATTEMPT_COUNT = 10
+local ATTEMPT_COUNT = 20
 local BUDGET_SCARCE = 1
 local BUDGET_WAIT = 5
 
@@ -117,7 +117,7 @@ function DataStore.UpdateData(player: Player, callback: <T>(old_value: T) -> T, 
         if halt then
             WaitForRequestBudget(UpdateAsyncRequest)
         end
-        
+
 		success, result = pcall(MainDataStore.UpdateAsync, MainDataStore, player.UserId, callback)
 	until success or count == ATTEMPT_COUNT
 
