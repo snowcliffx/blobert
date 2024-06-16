@@ -4,7 +4,11 @@
 
 --[ TYPES ]--
 type Data = {
-	Money: number,
+    Entertainment: number,
+    Health: number,
+    Hunger: number,
+    Money: number,
+    Thirst: number,
 }
 
 local PlayerData = {} :: { [number]: Data }
