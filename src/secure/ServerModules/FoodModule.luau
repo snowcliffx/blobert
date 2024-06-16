@@ -35,7 +35,11 @@ function FoodModule.Feed(player: Player, name: string)
     local CurrentData = PlayerData[player.UserId]
 
     if FoodToFeed then
-        CurrentData.Hunger += FoodToFeed.Saturation
+        if CurrentData.FoodOwned[name] then
+            CurrentData.Hunger += FoodToFeed.Saturation
+        else
+            print("Food is not in the inventory!")
+        end
     else
         print("Food not found!")
     end
